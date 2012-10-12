@@ -1,0 +1,464 @@
+\documentclass{article}
+% Change "article" to "report" to get rid of page number on title page
+\usepackage{amsmath,amsfonts,amsthm,amssymb}
+\usepackage{setspace}
+\usepackage{Tabbing}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{extramarks}
+\usepackage{chngpage}
+\usepackage{soul,color}
+\usepackage{graphicx,float,wrapfig}
+\usepackage[usenames,dvipsnames]{pstricks}
+\usepackage{epsfig}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{ifoption}
+\usepackage{psfrag}
+\usepackage{array}
+\usepackage{verbatim}
+\usepackage{xy}
+\usepackage{color}
+\usepackage{units}
+\usepackage{subfig}
+\usepackage{pseudocode}
+\usepackage[french,english]{babel}
+\usepackage{multicol}
+\usepackage{lipsum}
+\usepackage{mathrsfs}
+\usepackage{auto-pst-pdf}
+
+% In case you need to adjust margins:
+\topmargin=-0.9in      %
+\evensidemargin=-0.8in     %
+\oddsidemargin=-0.8in      %
+\textwidth=8in        %
+\textheight=10.3in       %
+\headsep=0.1in         %
+
+
+% Setup the header and footer
+\pagestyle{fancy}         
+\fancyhf{}                                                       %
+\lhead{Christopher Chiche}                                                 %
+\rhead{Signal Processing Summary}                  %
+\renewcommand\headrulewidth{0.4pt}                                      %
+                                   %
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\setcounter{secnumdepth}{0}
+
+% Self made commands
+\newcommand{\ip}[2]{\left \langle #1, \, #2 \right \rangle} %for scalar product
+\newcommand{\para}[1]{\textbf{\underline{#1}}\\*} %for subsubsections and other stuff, especialy when there are 3 columns
+\newcommand{\subpara}[1]{\textbf{#1}}
+\setlength{\parindent}{0cm}
+\newcommand{\difrac}[2]{\frac{\partial #1}{\partial #2}}
+
+
+\begin{document}
+%\fontsize{7pt}{0}
+% CHAPITRE 2
+\subsection{2 - Discrete-Time Signals}
+\begin{multicols}{2}
+\textbf{Energy} $\displaystyle E_x = \|x\|_2^2 = \sum_{n=-\infty}^{\infty} {\left | x[n] \right |}^2 $ \\
+\textbf{Power} $ P_x =\lim_{N\to\infty} \frac1{2N} \sum_{n=-N}^{N}{\left | x[n] \right |}^2 $\\
+\textbf{Finite support}$\exists M$ s.t $x[n] = 0,\  \forall n<M$ and $ n>M+N-1$
+\end{multicols}
+% CHAPITRE 3
+\subsection{3 - Signals and Hilbert Spaces} 
+\begin{multicols}{3}
+\para{Vector Space} 
+\subpara{Commutativity} $x+y = y+x$\\
+\subpara{Associativity} $(x+y) + z = x + (y+z)$\\
+\subpara{Distributivity} $\alpha(x+y) = \alpha x+\alpha y \\ (\alpha + \beta) x = \alpha x + \beta y$\\
+\subpara{Null vector} $\exists 0 \in V \text{ s.t } x+0 = x \forall x$\\
+\subpara{Inverse} $x+y = y+x$\\
+\subpara{Identity element} $\exists 1\text{ s.t } x.1= 1.x=x$\\
+\\
+\para{Inner Product Space} 
+\subpara{Distributivity} $\ip{x+y}{z}$\\
+\subpara{Scaling property} $\ip{x}{\alpha y} = \alpha^*\ip{x}{y} $\\
+\subpara{Commutative} $\ip{x}{y} = \ip{y}{x}*$\\
+\subpara{Self-product positive}$\ip xx \geq 0 \\ \ip xx =0  \Leftrightarrow x= 0$
+An inner product space is a vector space equipped with an inner product. \\
+\subpara{Complete space} sequences converge in the space\\
+\subpara{Hilbert space} space is a complete inner product space \\
+\subpara{Subspace} \\
+- Closure under additions :\\ $ \forall x,y \in P \Rightarrow x + y \in P$\\
+- Closure under scalar multiplication: \\
+$\forall x \in P, \forall \alpha \in S \Rightarrow \alpha x \in P $
+\\ \subpara{Span} set of all linear combinations of the vectors in W. \\
+\subpara{Basis} set linearly independant, its span covers the region, ie $\operatorname{span}(W) = P$\\
+\subpara{Norm :} $\geq 0$, $||\alpha x|| = |\alpha|\ ||x||$. triangle inequality \\
+%
+\para{Orthogonal/Orthonormal Basis}
+\subpara{Parseval's Identity} \\ $\left \| y \right \| = \displaystyle\sum_{k=0}^{K-1}\left | \ip{x^{(k)}}y \right | ^2$
+\\ \subpara{Bassel's Identity}\\ $\left \| y \right \| \geq \displaystyle\sum_{l=0}^{L-1}\left | \ip{g^{(l)}}y \right | ^2 \text{, with } G \subset P$
+\\ \subpara{Best Approximations}\\ $\hat{y}  = \displaystyle \sum_{k=0}^{K-1} \ip{x^{(k)}}y x^{(k)} $
+\\
+\para{Notations}
+- $\ell_1$ : absolutely summable sequence\\
+- $\ell_2$ : square summable sequence\\
+- $L_1$ : absolutely integrable function
+\\
+\para{Cauchy Sequence}
+$ \forall \epsilon >0, \exists N\in \mathbb{N}\ |\ \forall n,m \geq N, |x_n - x_m|< \epsilon$
+
+
+\end{multicols}
+
+% CHAPITRE 4
+\subsection{4 - Fourier Analysis}
+\begin{multicols}{2}
+%tableau resumé 1 p88-89
+\subsubsection{Discrete-Time Fourier Transform (DTFT)}
+$$
+\begin{array}{ll}
+\text{used for:} & \text{infinite, two sided signals (}x[n] \in \ell_2(\mathbb{Z})\text{)} \\
+\text{analysis formula: }& X(e^{j\omega}) = \displaystyle \sum_{n=-\infty}^\infty x[n]e^{-j\omega n} \\
+\text{synthesis formula: }& x[n]= \displaystyle \frac1{2\pi}  \int_{-\pi}^\pi X(e^{j\omega}) e^{j\omega n}\mathrm{d}\omega \\
+\text{symmetries:} & x[-n]   \overset{DTFT}{\longleftrightarrow}  X(e^{-j\omega}) \\
+&x^*[n]   \overset{DTFT}{\longleftrightarrow}  X^*(e^{-j\omega}) \\
+\text{shifts:} & x[n-n_0]  \overset{DTFT}{\longleftrightarrow} e^{-j\omega n_0}X(e^{j\omega})\\
+& e^{-j\omega_0 n}x[n] \overset{DTFT}{\longleftrightarrow} X(e^{j(\omega-\omega_0)}) \\
+\text{Parseval:} & \displaystyle \sum_{n=-\infty}^\infty \left | x[n] \right | ^2 = \frac1{2\pi} \displaystyle \int_{-\pi}^\pi \left | X(e^{j\omega}) \right | ^2 \mathrm{d} \omega
+\end{array}
+$$
+%tableau resumé 2 p88-89
+\subsubsection{Some DTFT pairs}
+$$
+\begin{array}{ll}
+x[n] = \delta[n-k] & X(e^{j\omega}) = e^{-j\omega k} \\
+x[n] = 1 & X(e^{j\omega k})  = \tilde\delta (\omega) \\
+x[n] = u[n] & X(e^{j\omega}) =\displaystyle \frac1{1-e^{-j\omega}} + \frac12\tilde\delta(\omega) \\
+x[n] = a^nu[n], |a|<1 & X(e^{j\omega}) =\displaystyle \frac1{1-ae^{-j\omega}}\\
+x[n] = e^{j\omega_0 n} & X(e^{j\omega}) = \tilde\delta(\omega- \omega_0) \\
+x[n] = \cos (\omega_0 n + \phi) & X(e^{j\omega}) = \frac12 [ e^{j\phi} \tilde\delta(\omega- \omega_0) + e^{-j\phi} \tilde\delta(\omega+\omega_0)  ]\\
+x[n] = \sin (\omega_0 n + \phi) & X(e^{j\omega}) = \frac{-j}2 [ e^{j\phi} \tilde\delta(\omega- \omega_0) - e^{-j\phi} \tilde\delta(\omega+\omega_0)  ]\\
+\end{array}
+$$ $$
+\begin{array}{ll}
+x[n] = \left\{ \footnotesize{\begin{array}{ll} 1 & \text{for } 0\leq n\leq N-1 \\ 0 & \text{otherwise} \end{array}}\right.
+& X(e^{j\omega}) = \frac{\sin{((N/2)\omega)}}{\sin{(\omega/2)}}e^{-j\frac{N-1}2 \omega} \\
+\end{array}
+$$
+%tableau resumé 3 p88-89
+\newcommand{\Wnp}[1]{e^{-j\frac{2\pi}N #1}} %with the minus
+\newcommand{\Wnm}[1]{e^{j\frac{2\pi}N #1}} %without the minus
+\subsubsection{Discrete Fourier Series(DFS)}
+$$
+\begin{array}{ll}
+\text{used for:}  & \text{periodic signals (} \tilde x [n] \in \tilde{\mathbb{C}} ^N \text ) \\
+\text{analysis formula: }& \tilde X[k] = \displaystyle \sum_{n=0}^{N-1} \tilde x[n]\Wnp{nk}, k = 0,\ldots, N-1\\
+\text{synthesis formula: }& \tilde x[n]= \displaystyle \frac1N  \sum_{k=0}^{N-1} \tilde X[k] \Wnm{nk}, n = 0,\ldots, N-1 \\
+\text{symmetries:} & \tilde x[-n]   \overset{DFS}{\longleftrightarrow}  \tilde X[-k] \\
+&\tilde x^*[n]   \overset{DFS}{\longleftrightarrow}  \tilde X*[-k] \\
+\text{shifts:} & \tilde x[n-n_0]  \overset{DFS}{\longleftrightarrow} \Wnp{kn_0} \tilde X[k]\\
+& \Wnm{nk_0}\tilde x[n] \overset{DFS}{\longleftrightarrow} \tilde X[k - k_0]\\
+\text{Parseval:} & \displaystyle \sum_{n=-0}^{N-1} \left | \tilde x[n] \right | ^2 = \frac1N \displaystyle \sum_0^{N-1} \left | \tilde X[k] \right | ^2 \mathrm{d} \omega
+\end{array}
+$$
+%tableau resumé 4 p88-89
+\subsubsection{Discrete Fourier Transform(DFT)}
+$$
+\begin{array}{ll}
+\text{used for:}  & \text{finite support signals (} x [n] \in \mathbb{C} ^N \text ) \\
+\text{analysis formula: }&  X[k] = \displaystyle \sum_{n=0}^{N-1}  x[n]\Wnp{nk}, k = 0,\ldots, N-1\\
+\end{array}
+$$ $$
+\begin{array}{ll}
+\text{synthesis formula: }&  x[n]= \displaystyle \frac1N  \sum_{k=0}^{N-1}  X[k] \Wnm{nk}, n = 0,\ldots, N-1 \\
+\text{symmetries:} &  x[-n \mod N]   \overset{DFT}{\longleftrightarrow}   X[-k\mod N] \\
+& x^*[n]   \overset{DFT}{\longleftrightarrow}  X^*[-k \mod N] \\
+\text{shifts:} &  x[(n-n_0) \mod N]  \overset{DFT}{\longleftrightarrow} \Wnp{kn_0}  X[k]\\
+& \Wnm{nk_0} x[n] \overset{DFT}{\longleftrightarrow}  X[(k - k_0) \mod N]\\
+\text{Parseval:} & \displaystyle \sum_{n=-0}^{N-1} \left |  x[n] \right | ^2 = \frac1N \displaystyle \sum_0^{N-1} \left |  X[k] \right | ^2 \mathrm{d} \omega
+\end{array}
+$$
+%tableau resumé 5 p88-89
+\subsubsection{Some DFT pairs for length-$N$ signals}
+$$
+\begin{array}{ll}
+x[n] = \delta[n-k] & X[k] =  e^{-j\frac{2\pi}N k} \\
+x[n] = 1 & X[k]  = N\delta[k]\\
+x[n] = e^{j\frac{2\pi}N L} & X[k] =N\delta[k-L] \\
+\end{array}
+$$ $$
+\begin{array}{ll}
+x[n] = \cos (\frac{2\pi}N Ln + \phi) & X[k] = \frac N2 [ e^{j\phi} \delta[k-L] + e^{-j\phi} \delta[k-N+L ]\\
+x[n] = \sin (\frac{2\pi}N Ln + \phi) & X[k] = \frac{-jN}2 [ e^{j\phi} \delta[k-L] - e^{-j\phi} \delta[k-N+L ]\\
+\end{array}
+$$ $$
+\begin{array}{ll}
+x[n] = \left\{\footnotesize{\begin{array}{ll} 1 & \text{for } n\leq M-1 \\ 0 & \text{for } M\leq n\leq N-1 \end{array}}\right.
+& X[k] = \frac{\sin{((\pi/N)Mk)}}{\sin{((\pi/N)k)}}e^{-j\frac{\pi}N (M-1)k} \\
+\end{array}
+$$
+\end{multicols}
+% CHAPITRE 5
+\subsection{5 - Discrete-Time Filters}
+\begin{multicols}{2}
+%
+\subsubsection{Linear Time-Invariant Systems (LTI)}
+\textbf{Time Invariance:} \\$y[n] =  \mathscr{H}\{ x[n] \} \Leftrightarrow y[n-n_0] =  \mathscr{H}\{ x[n - n_0] \}$\\ 
+\textbf{LTI:} $y[n] = \mathscr{H}\{ x[n] \} = \displaystyle \sum_{k=-\infty}^\infty x[k]h[n-k]$
+%
+\subsubsection{Filtering in the Time Domain}
+\textbf{Convolution :} $\tilde x[n] * \tilde y[n] = \displaystyle \sum_{k=0}^{N-1}\tilde x[k] \tilde y[n-k]$\\
+$X(e^{j\omega}) * Y(e^{j\omega}) = \frac1{2\pi} \int_{-\pi}^{\pi} X(e^{j\sigma}) * Y(e^{j(\omega-\sigma)}) \mathrm{d}\sigma$
+\underline{Properties of the Impulse Response}\\
+\textbf{IIR filters:} Infinite Impulse Response.\\
+\textbf{FIR filters:} Finite Impulse Response.  \\
+\textbf{Causality:} outputs doesn't depend on future values of input. \\
+\textbf{Stability:} A system is called BIBO stable if its output is bounded for all bounded input sequences.\\
+sufficient condition : absolutely summable
+\subsubsection{Filtering in the Frequency Domain}
+\underline{Properties of the Frequency response}\\
+\textbf{Magnitude :} lowpass, highpass, bandpass or allpass filter. \\
+\textbf{Phase :} the phase response acts as a generalized delay. \\
+\textbf{Linear Phase :} $\measuredangle H(e^{j\omega}) = \omega d$\\
+%
+\subsubsection{Filtering by Example : Frequency Domain}
+\textbf{Moving Average} $ H(e^{j\omega}) = \frac1N \frac{\sin(\omega N/2)}{\sin(\omega/2)} e^{-j\frac{N-1}2 \omega} $\\
+\textbf{Leaky Integrator} $H(e^{j\omega}) = \frac{1-\lambda}{1-\lambda e^{-j\omega}} $
+%
+\subsubsection{Ideal Filters}
+\textbf{Ideal Lowpass:} $h_{lp}[n] = \frac{\sin(\omega_cn)}{\pi n}; \qquad \operatorname{sinc}(x) = \frac{\sin (\pi x)}{\pi x}$\\
+\textbf{Ideal Highpass:} $h_{hp}[n] = \delta[n] - \frac{\omega_c}{\pi}\operatorname{sinc}\left ( \frac{\omega_c}{\pi} n \right) $\\
+\textbf{Ideal Bandpass:} $h_{bp}[n] =2\cos(\omega_0 n)\frac{\omega_b}{2\pi}\operatorname{sinc}\left ( \frac{\omega_b}{2\pi} n \right) $\\
+\textbf{Hilbert Filter:} $ H(e^{j\omega} )=\footnotesize \left \{ \begin{array}{ll} -j & 0\leq \omega \leq \pi \\ +j &-\pi \leq \omega \leq 0 \end{array}  \right.$\\
+$ h[n] = \frac{2\sin^2(\pi n/2)}{\pi n} =\footnotesize \left \{ \begin{array}{ll} 0& \text{for } n \text{ even} \\ \frac2{n\pi} &\text{for } n \text{ odd} \end{array}  \right.$
+% 
+%\subsubsection{Realizable Filters}
+\end{multicols}
+% CHAPITRE 6
+\subsection{6 - The Z-transform}
+\begin{multicols}{2}
+For DFTs : $z= e^{j\omega}$
+$$
+\begin{array}{lll}
+\textbf{Signal} & \textbf{Transform} & \textbf{ROC}\\
+ \delta[n]  &1 & \mbox{all }z \\
+ \delta[n-n_0] & z^{-n_0}  & z \neq 0\\
+ u[n] & \frac{1}{1-z^{-1} }&|z| > 1\\
+ e^{-\alpha n} u[n]  &  1 \over 1-e^{-\alpha  }z^{-1}&  |z| >  |e^{-\alpha}| \\
+ - u[-n-1] & \frac{1}{1 - z^{-1}}&|z| < 1\\
+ n u[n] & \frac{z^{-1}}{( 1-z^{-1} )^2}&|z| > 1\\
+ - n u[-n-1] & \frac{z^{-1} }{ (1 - z^{-1})^2 }& |z| < 1 \\
+ n^2 u[n] &  \frac{ z^{-1} (1 + z^{-1} )}{(1 - z^{-1})^3} &|z| > 1\\
+ - n^2 u[-n - 1] &  \frac{ z^{-1} (1 + z^{-1} )}{(1 - z^{-1})^3} &|z| < 1\\
+ n^3 u[n] & \frac{z^{-1} (1 + 4 z^{-1} + z^{-2} )}{(1-z^{-1})^4} &|z| > 1\\
+ - n^3 u[-n -1] & \frac{z^{-1} (1 + 4 z^{-1} + z^{-2} )}{(1-z^{-1})^4} &|z| < 1\\
+ a^n u[n] & \frac{1}{1-a z^{-1}}& |z| > |a|\\
+  -a^n u[-n-1] & \frac{1}{1-a z^{-1}}&|z| < |a|\\
+  n a^n u[n] & \frac{az^{-1} }{ (1-a z^{-1})^2 }&|z| > |a|\\
+  -n a^n u[-n-1] & \frac{az^{-1} }{ (1-a z^{-1})^2 }& |z| < |a|\\
+  n^2 a^n u[n] & \frac{a z^{-1} (1 + a z^{-1}) }{(1-a z^{-1})^3} &|z| > |a|\\
+  - n^2 a^n u[-n -1] & \frac{a z^{-1} (1 + a z^{-1}) }{(1-a z^{-1})^3} &|z| < |a|\\
+  \cos(\omega_0 n) u[n] & \frac{ 1-z^{-1} \cos(\omega_0) }{ 1-2z^{-1}\cos(\omega_0)+ z^{-2} }& |z| >1\\
+  \sin(\omega_0 n) u[n] & \frac{ z^{-1} \sin(\omega_0) }{ 1-2z^{-1}\cos(\omega_0)+ z^{-2} }& |z| >1\\
+   a^n \cos(\omega_0 n) u[n] & \frac{ 1-a z^{-1} \cos( \omega_0) }{ 1-2az^{-1}\cos(\omega_0)+ a^2 z^{-2} }& |z| > |a|\\
+a^n \sin(\omega_0 n) u[n] & \frac{ az^{-1} \sin(\omega_0) }{ 1-2az^{-1}\cos(\omega_0)+ a^2 z^{-2} }& |z| > |a|
+\end{array}
+$$
+\subsubsection{Filter Analysis}
+\textbf{Z-transform:} $X(z)= \mathscr{Z}\{x[n]\} = \sum_{n=-\infty}^\infty x[n]z^{-n}$  \\
+\textbf{Inverse Z-transform:} $\mathscr{Z}^{-1} \{X(z)\} = \frac 1{2\pi j} \oint_C X(z) z^{n-1}\mathrm{d}z$
+\textbf{Time-shift} $\mathscr{Z}\{x[n-N](z)\} = z^{-N}X(z)$\\
+\textbf{CCDE:} Constant-Coefficient Difference Equation 
+$$y[n] = \sum_{k=0}^{M-1}b_kx[n-k] - \sum_{k=0}^{N-1}a_ky[n-k], \quad H(z) = \frac{\sum_{k=0}^{M-1}b_kz^{n-k}}{1 +  \sum_{k=0}^{N-1}a_kz^{n-k}}  $$
+\textbf{Region pf Convergence}\\
+The ROC has circular geometry\\
+\underline {Anticausal ROC:} Disk \indent \underline{Causal ROC:} plane \textbackslash disk \\
+\underline{Stability:} a system is BIBO stable if its ROC includes the unit circle.\\ 
+\textbf{The Pole-Zero plot} $$H(z) = b_0\frac{\prod_{n=0}^{M-1}(1-z_nz^{-1})}{\prod_{n=0}^{N-1}(1-p_nz^{-1})} $$
+\textbf{Sketching the Transfer Function from the Pole-Zero Plot}
+1- Check for the zeros on the unit circle; these  correspond to points on the frequency axis in which the magnitude response is exactly zero\\
+2 - Draw a line from the origin of the complex plane to each pole and each zero. The point of intersection of each line with the unit circle gives the location of a local extremum for the magnitude response. \\
+3 - The effect of each pole and each zero is made stronger by their proximity to the unit circle
+\end{multicols}
+% CHAPITRE 7
+\subsection{7 - Filter Design}
+\begin{multicols}{2}
+\para{Filter Specifications and Tradeoffs}
+\subpara{Transition Band.} Range of frequencies between passband and stopband
+\subpara{Tolerances.} Min and Max frequency response over passband and stopband.  
+%\begin{figure}[H] \centering \includegraphics[width=7cm]{images/filterD.png} \end{figure}
+\\
+\para{FIR Filter Design}
+\subpara{FIR Filter Design By Windowing}
+\textit{Impulse Response Truncation}
+$$ \hat h [n] = \left \{ \begin{matrix} h[n] & -N \leq n \leq N \\ 0 & \text{otherwise} \end{matrix} \right . $$
+\textit{The Rectangular Window}
+$$ \hat h [n] = h[n]w[n] \quad \text{with : } w[n] = \operatorname{rect}\left ( \frac nN \right ) =
+\left \{ \begin{matrix} 1 & -N \leq n \leq N \\ 0 & \text{otherwise} \end{matrix} \right . $$
+
+\textit{Gibbs phenomenon:} The maximum error does not decrease with increasing $N$ and, therefore, there are no means to meet a set of specifications which require less tan 9\% error in either stopband or passband.
+\\\\ This truncation produces 2 main effects : \\
+- Sharp transition from passband to stopband is smoothed by the convolution with the main lobe of width $\Delta$.\\
+- Ripples appear both in the stopband and the passband due to the convolution with the sidelobes (the largest ripple being the Gibbs phenomenon).
+
+\end{multicols}
+
+
+% CHAPITRE 8
+\subsection{8 - Stochastic Signal Processing} 
+\begin{multicols}{3}
+\para{Random Variables}
+\subpara{Expectation:} $E[X] = \int_{-\infty}^\infty x f_X(x)dx$\\
+$E[g(X)] = \int_{-\infty}^\infty g(x) f_X(x)dx$\\
+\subpara{Correlation:} $R_{XY} = E[XY]$\\
+\subpara{Covariance:} $K_{XY} = E[XY]-E[X]E[Y]$\\
+\subpara{Variance:} $\sigma_X^2 = E[(W-m_x)^2]$\\
+\\ \para{Random Vectors}
+\subpara{Expectation:}\\ $E[\mathbf{X}] = \left [ E[X_0],E[X_1], ..., E[X_{N-1}] \right]^T  $\\
+\subpara{Correlation:} $\mathbf{R_{XY}} = E[\mathbf{XY}^T]$\\
+\subpara{Cov:} $\mathbf{K_{XY}} = E[(\mathbf{X-m_X})(\mathbf{Y-m_Y})]$\\
+\\\para{Random Processes}
+\subpara{Probability Distribution:}\\$f_{X[i_0]X[i_1]...X[i_{k-1}]}(x_0, x_1,...,x_{k-1})$\\
+\subpara{Second Order Description:}\\
+$R_X[l,k] = E[X[l]X[k]], \quad l,k \in \mathbb{Z}$\\
+$K_X[l,k] = E\left [\left(X[l]-m_{X[l]}\right)\left(X[k]-m_{X[k]}\right)\right]$\\
+$R_{XY}[l,k] = E[X[l]Y[k]]$ (cross-correlation)\\
+\subpara{Stationary Processes}\\
+\textit{Strict sense:} The full probabilistic description of the process is time invariant\\
+\textit{WSS:} mean and variance are constant over time and autocorrelation and covariance only depend on the time lag $(l-k)$\\
+\subpara{Ergodicity}\\
+It is legitimate to estimate expectations from a single realization 
+\\\para{Spectral Rep of Statio Rand Processes}
+$P_X(e^{j\omega}) =\sum_{k=-\infty}^\infty r_X[k] e^{-j\omega k}$\\
+\\\para{Stochastic Signal Processing}
+$\displaystyle Y[n] = \sum_{k=-\infty}^\infty h[k]X[n-k]$  with stable LTI filter and WSS input process\\
+\subpara{Time-Domain Analysis}\\
+$ m_{Y[n]}= \sum_{n=-\infty}^\infty h[k]m_{n-k} = m_XH(e^{j0})$\\
+$r_Y[n]= h[n]*h[-n]*r_X[n]$\\
+$ r_{XY}[N] = h[n]*r_X[n]$\\
+\subpara{Frequency-Domain Analysis}\\
+$P_Y(e^{j\omega}) = \left | H(e^{j\omega}) \right | ^2 P_X(e^{j\omega})$\\
+$P_{XY}(e^{j\omega}) = H(e^{j\omega}) P_X(e^{j\omega})$
+
+\end{multicols}
+
+
+
+
+% CHAPITRE 9
+\subsection{9 - Interpolation ans Sampling} 
+\begin{multicols}{2}
+\para{Continuous-Time Fourier Transform}
+$X(j\Omega) = \int_{-\infty}^\infty x(t) e^{-j\Omega t} dt$\\
+$x(t) =\frac 1{2\pi} \int_{-\infty}^\infty X(j\Omega) e^{j\Omega t} d\Omega$\\ 
+\\\subpara{Bandlimited Signals}\\
+$\exists \Omega_N \text{ s.t }X(j\Omega)=0 \text{ for } |\Omega| \geq |\Omega_N|$\\
+\subpara{Polynomial Interpolation}
+\begin{align*}
+L_n^{(N)}(t) &= \prod_{\underset{k\neq n}{k=-N}}^N \frac{(t-t_k)}{(t_n-t_k)} \\&= \prod_{\underset{k\neq n}{k=-N}}^N \frac{(t/T_s-k)}{(n-k)}
+\end{align*}
+$\displaystyle P(t) = \sum_{n=-N}^N x[n]L_n^{(N)}(t)$\\
+\subpara{Sinc Interpolation}\\
+$\displaystyle x(t) = \sum_{n=-\infty}^\infty x[n]\operatorname{sinc}\left ( \frac{t- nT_s}{T_s} \right ) $\\
+\para{The Sampling Theorem}
+\textit{If $x(t)$ is a $\Omega_N$-bandlimited continuous-time signal, a sufficient representation of $x(t)$ is given by the discrete time signal $x[n] = x(nT_s)$, with $T_s = \pi/\Omega_N$. The continuous time signal $x(t)$ can be exactly reconstruced form the discrete-time signal $x[n]$ as : $\displaystyle x(t) = \sum_{n=-\infty}^\infty x[n]\operatorname{sinc}\left ( \frac{t- nT_s}{T_s} \right )$
+}
+\\
+\\ \subpara{Observation: }limited bandwidth in a domain $\Leftrightarrow$ illimited in the other  
+%\para{Aliasing}
+%TODO
+\end{multicols}
+
+% CHAPITRE 10
+\subsection{10 - A/D and D/A Conversions} 
+\begin{multicols}{2}
+\para{Quantization}
+$\mathscr Q \{x[n]\} = \{ k | x[n] \in I_k\} \text{ with } I_k = [i_k, i_{k+1}]$\\
+\subpara{Quantization Error} \\
+Quantization is highly non-linear.\\ 
+$\mathscr Q \{ \underset{i_m}{\underbrace{x[n]}} + \epsilon[n] \} = \begin{cases}
+k-1  & \text{ if } \epsilon[n] \leq 0 \\ 
+k  & \text{ if } \epsilon[n] > 0 
+\end{cases}$\\
+$\mathbb P\left (\tilde X = \tilde x = \frac i {2^r}\right) = p\left \{  \frac i {2^r} \leq x \leq  \frac {i+1} {2^r} \right \}$\\
+$p_e = \int_\Omega (x-\tilde x)^2 f_x(x) dx$
+
+\end{multicols}
+
+%CHAPITRE 11
+\subsection{11 - Multirate Signal Processing}
+\begin{multicols}{2}
+\subsubsection{Downsampling}
+$x_{ND}[n] = \mathscr{D}\{x[n]\} = x[nN]$ ;\\ 
+$\displaystyle X_{ND}(e^{j\omega}) = \frac1N\sum_{k=0}^{N-1}X(e^{j(\frac\omega N - \frac{2\pi}N k)}) = \frac1N\sum_{k=0}^{N-1}X(z^\frac1N e^{-j\frac{2\pi}N k)})$
+\subsubsection{Upsampling}
+$x_{NU}[n] = \mathscr{U}\{x[n]\} = \left \{ \begin{array}{ll}x[k]&\text{for } n=kN, k\in \mathbb{Z}\\ 0 & \text{otherwise} \end{array} \right.$ ;\\
+$\displaystyle X_{NU}(e^{j\omega}) = X(e^{j\omega N}) = X(z^N)$
+\end{multicols}
+%\subsubsection{Oversampling}
+%TODO: read
+
+%CHAPITRE 12 
+%\subsection{12 - Design of a Digital Communication System}
+%TODO : read
+% RAPPELS 
+\subsection{Rappels}
+\begin{multicols}{3}
+\para{Series}
+$ \displaystyle \sum_{i=0}^{n-1} q^i= \frac{1-q^n}{1-q}$;
+$  \displaystyle \sum_{i=1}^{n} i= \frac{n(n+1)}{2}$;
+$  \displaystyle \sum_{i=1}^{n} i^2= \frac{n(n+1)(2n+1)}{6}$
+\\\\\para{Trigonometry}
+\begin{align*}
+&\cos(a + b) = \cos(a)\cos(b) - \sin(a)\sin(b)\\
+&\sin(a + b) = \sin(a)\cos(b) + \cos(a)\sin(b)\\
+&\tan(a + b) = \frac{\tan(a) + \tan(b)}{1 - \tan(a)\tan(b)}
+\end{align*}
+\begin{align*}
+&\cos(p) + \cos(q) = 2\cos(\frac{p+q}{2})\cos(\frac{p-q}{2})\\
+&\cos(p) - \cos(q) = -2\sin(\frac{p+q}{2})\sin(\frac{p-q}{2})\\
+&\sin(p) + \sin(q) = 2\sin(\frac{p+q}{2})\cos(\frac{p-q}{2})\\
+&\sin(p) - \sin(q) = 2\sin(\frac{p-q}{2})\cos(\frac{p+q}{2})
+\end{align*}
+\begin{align*}
+&\cos(a)\cos(b) = \frac{1}{2} (\cos(a + b) + \cos(a - b))\\
+&\sin(a)\sin(b) = \frac{1}{2} (\cos(a - b) - \cos(a + b))\\
+&\sin(a)\cos(b) = \frac{1}{2} (\sin(a + b) + \sin(a - b))
+\end{align*}
+\begin{align*}
+&\cos(a) = \frac{1-\tan^2(\frac{a}{2})}{1+\tan^2(\frac{a}{2})}\\
+&\sin(a) = \frac{2\tan(\frac{a}{2})}{1+\tan^2(\frac{a}{2})}\\
+&\tan(a) = \frac{2\tan(\frac{a}{2})}{1-\tan^2(\frac{a}{2})}
+\end{align*}
+\para{Residues}
+$Res(X(z)z^{n-1})\left | _{z=z_i} \right. = \frac{A(z_i)}{B'(z_i)}z_i^{n-1}$
+\\\\\para{Taylor series}
+$ \log(1+x) = \sum_{n=1}^{\infty} \frac{(-1)^{n+1}}n x^n$\\
+$\frac1{1-x} = \sum_{n=1}^{\infty} x^n$
+\\\\\para{Bayes' Theorem}
+$P(A|B) = \frac{P(A \cap B)}{P(B)} = \frac{P(B|A)P(A)}{P(B)}$
+\\\\\para{Chebychev Polynomials}
+Used to prove Gibbs Phenomenon
+\begin{align*}
+&T_0(x) =1, T_1(x) = x, T_2(x) = 2x^2-1\\
+&T_{k+1}(x) = 2xT_k(x)-T_{k-1}(x)\\
+&\cos(n\omega) = T_n(cos(\omega)) 
+\end{align*}
+\para{Gaussian Distribution}
+$f(x) = \frac{1}{\sqrt{2\pi}\sigma} e^\frac{(x-\mu)^2}{2\sigma^2}$
+\\\\\para{Integral Derivation}
+if $\displaystyle f(t) =\int_{a(t)}^{b(t)} g(x,t)\mathrm dx$ then \\
+$\displaystyle \difrac{f(t)}t = \int_{a(t)}^{b(t)} \dfrac{g(x,t)}t \mathrm dx + \dfrac{b(t)}t g(b(t), t) - \dfrac{a(t)}t g(a(t), t)$
+\\\\\para{Period, pulsation, frequence}
+$ T = \frac1f, \quad \omega = 2\pi$
+\\\\\para{Multirate identities (Noble identities)}
+- Downsampling by $N$ followed by filtering by $H(z)$ is equivalent to filtering by $H(z^N)$
+followed by downsampling by $N$.\\
+- Filtering by $H(z)$ followed by upsampling by $N$ is equivalent to upsampling by $N$
+followed by filtering by $H(z^N)$.
+\\\\\para{DTFT}
+$x[n]=  \begin{cases}1 & \text{if } |n|\leq T \\ 0 & \text{otherwise} \end{cases}
+\\\overset{DTFT}{\longleftrightarrow} X(e^{j\omega} ) =\frac{\sin (\omega(T + \frac12) )}{\sin (\omega/2)} $
+\end{multicols}
+\end{document}
